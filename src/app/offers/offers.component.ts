@@ -22,7 +22,9 @@ export class OffersComponent implements OnInit, OnDestroy {
 
   ngOnInit() {
     this.items$ = this.itemsService.getItems().pipe(
-      map((items) => items.filter((item) => !item.itemType)),
+      map((items) =>
+        items.filter((item) => !item.itemType || item.itemType === 'DISCOUNT')
+      ),
       tap((items) => {
         this.item1 = items[0];
         this.item2 = items[1];
