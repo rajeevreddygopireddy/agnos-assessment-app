@@ -1,0 +1,62 @@
+<ng-container *ngIf="items$ | async as items">
+  <div class="row">
+    <ng-container *ngFor="let item of items">
+      <div class="col-3">
+        <app-card>
+          <card-title>
+            {{ item.itemName }}
+          </card-title>
+          <card-price>
+            <ng-container *ngIf="item.discountPrice; else showOriginalPrice">
+              <span class="line-through"> $ {{ item.itemPrice }} </span>
+              <span> $ {{ item.discountPrice }}</span>
+            </ng-container>
+            <ng-template #showOriginalPrice>
+              $ {{ item.itemPrice }}
+            </ng-template>
+          </card-price>
+          <card-desc>
+            <ng-container *ngIf="item.itemType; else normalItem">
+              <ng-container *ngIf="item.itemType === 'COMBO'">
+                {{ item.itemDescription }}
+              </ng-container>
+              <ng-container *ngIf="item.itemType === 'DISCOUNT'">
+                {{ item.itemDescription }}
+              </ng-container>
+              <ng-container *ngIf="item.itemType === 'ONEPLUSONE'">
+                {{ item.itemDescription }}
+              </ng-container>
+            </ng-container>
+            <ng-template #normalItem> </ng-template>
+          </card-desc>
+          <card-footer>
+            <ng-container *ngIf="itemsInCart[item.id]; else showAddtoCart">
+              <div class="showAddMore">
+                <button class="primary" (click)="addToCart(item, 'minus')">
+                  -
+                </button>
+                <span
+                  [ngClass]="{
+                    'item-qty-desc':
+                      item.itemType && item.itemType !== 'DISCOUNT',
+                    'item-quantity':
+                      !item.itemType || item.itemType === 'DISCOUNT'
+                  }"
+                  >{{ itemsInCart[item.id].quantity }}</span
+                >
+                <button class="primary" (click)="addToCart(item, 'add')">
+                  +
+                </button>
+              </div>
+            </ng-container>
+            <ng-template #showAddtoCart>
+              <button class="primary" (click)="addToCart(item)">
+                Add to Cart
+              </button>
+            </ng-template>
+          </card-footer>
+        </app-card>
+      </div>
+    </ng-container>
+  </div>
+</ng-container>

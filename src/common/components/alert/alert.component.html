@@ -1,0 +1,12 @@
+<div class="alert alert-{{ alertType }}">
+  <a
+    *ngIf="showCloseIcon"
+    href="javascript:void(0)"
+    class="close"
+    data-dismiss="alert"
+    aria-label="close"
+    title="close"
+    >×</a
+  >
+  <ng-content select="alert-content"></ng-content>
+</div>

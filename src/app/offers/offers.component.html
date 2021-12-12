@@ -1,0 +1,229 @@
+<div>
+  <app-alert [alerttype]="'success'" *ngIf="comboAdded">
+    <alert-content> <strong>Success! </strong> combo added </alert-content>
+  </app-alert>
+  <form #offersForm="ngForm">
+    <label class="container" for="combo"
+      >Add Combos
+      <input
+        type="radio"
+        name="offers"
+        value="COMBO"
+        id="combo"
+        [(ngModel)]="selectedOffer"
+        #offers="ngModel"
+      />
+      <span class="checkmark"></span>
+    </label>
+    <ng-container *ngIf="selectedOffer === 'COMBO'">
+      <ng-template [ngTemplateOutlet]="comboOffers"></ng-template>
+    </ng-container>
+    <label class="container" for="one_one"
+      >Buy One Get One Free
+      <input
+        type="radio"
+        name="offers"
+        value="ONEPLUSONE"
+        id="one_one"
+        [(ngModel)]="selectedOffer"
+        #offers="ngModel"
+      />
+      <span class="checkmark"></span>
+    </label>
+    <ng-container *ngIf="selectedOffer === 'ONEPLUSONE'">
+      <ng-template [ngTemplateOutlet]="onePlusOne"></ng-template>
+    </ng-container>
+    <label class="container" for="discount"
+      >Add Discounts
+      <input
+        type="radio"
+        name="offers"
+        value="DISCOUNT"
+        id="discount"
+        [(ngModel)]="selectedOffer"
+        #offers="ngModel"
+      />
+      <span class="checkmark"></span>
+    </label>
+    <ng-container *ngIf="selectedOffer === 'DISCOUNT'">
+      <ng-template [ngTemplateOutlet]="discounts"></ng-template>
+    </ng-container>
+    <ng-template #comboOffers>
+      <div class="row">
+        <div class="col-6">
+          <ng-container *ngIf="items$ | async as items">
+            <p>
+              <select
+                name="item1"
+                class="custom-styles"
+                [(ngModel)]="item1"
+                (change)="onCombo1Chng()"
+              >
+                <option [ngValue]="" disabled selected>
+                  Select Item1 for Combo offer
+                </option>
+                <option *ngFor="let item of items" [ngValue]="item">
+                  <ng-container *ngIf="item2?.id !== item.id">
+                    {{ item.itemName }}
+                  </ng-container>
+                </option>
+              </select>
+              <ng-container *ngIf="item1?.itemPrice">
+                $ {{ item1?.itemPrice }}
+              </ng-container>
+            </p>
+            <p>+</p>
+            <p>
+              <select name="item2" class="custom-styles" [(ngModel)]="item2">
+                <option value="" disabled>Select Item2 for Combo offer</option>
+                <option *ngFor="let item of items" [ngValue]="item">
+                  <ng-container *ngIf="item1?.id !== item.id">
+                    {{ item.itemName }}
+                  </ng-container>
+                </option>
+              </select>
+              <ng-container *ngIf="item2?.itemPrice">
+                $ {{ item2?.itemPrice }}
+              </ng-container>
+            </p>
+          </ng-container>
+        </div>
+        <div class="col-5 combo-price">
+          <span> =</span>
+          $
+          <input
+            type="number"
+            name="comboAmount"
+            class="inputStyle"
+            [(ngModel)]="amount"
+            placeholder="Enter Combo amount.."
+            [disabled]="!(item2?.itemPrice && item1?.itemPrice)"
+          />
+        </div>
+      </div>
+      <div class="row">
+        <div class="col-12">
+          <button
+            (click)="addOffer('addCombo')"
+            class="primary"
+            [disabled]="!(item2?.itemPrice && item1?.itemPrice && amount)"
+          >
+            Add Combo
+          </button>
+        </div>
+      </div>
+    </ng-template>
+    <ng-template #onePlusOne>
+      <div class="row">
+        <div class="col-6">
+          <ng-container *ngIf="items$ | async as items">
+            <p>
+              Buy
+              <select
+                name="item1"
+                class="custom-styles"
+                [(ngModel)]="item1"
+                (change)="onCombo1Chng()"
+              >
+                <option *ngFor="let item of items" [ngValue]="item">
+                  <ng-container *ngIf="item2?.id !== item.id">
+                    {{ item.itemName }}
+                  </ng-container>
+                </option>
+              </select>
+              <ng-container *ngIf="item1?.itemPrice">
+                $ {{ item1?.itemPrice }}
+              </ng-container>
+            </p>
+            <p>and get</p>
+            <p>
+              <select name="item2" class="custom-styles" [(ngModel)]="item2">
+                <option value="" disabled>Select Item2 for Combo offer</option>
+                <option *ngFor="let item of items" [ngValue]="item">
+                  <ng-container *ngIf="item1?.id !== item.id">
+                    {{ item.itemName }}
+                  </ng-container>
+                </option>
+              </select>
+              for Free
+            </p>
+          </ng-container>
+        </div>
+        <div class="col-5 combo-price">
+          <span> =</span>
+          $
+          <input
+            type="number"
+            name="oneplusoneAmount"
+            class="inputStyle"
+            [(ngModel)]="amount"
+            placeholder="Enter amount.."
+            [disabled]="!(item2?.itemPrice && item1?.itemPrice)"
+          />
+        </div>
+      </div>
+      <div class="row">
+        <div class="col-12">
+          <button
+            (click)="addOffer('oneplusone')"
+            class="primary"
+            [disabled]="!(item2?.itemPrice && item1?.itemPrice && amount)"
+          >
+            Add Buy one get One Free
+          </button>
+        </div>
+      </div>
+    </ng-template>
+    <ng-template #discounts>
+      <div class="row">
+        <div class="col-6">
+          <ng-container *ngIf="items$ | async as items">
+            <p>
+              Buy
+              <select
+                name="item1"
+                class="custom-styles"
+                [(ngModel)]="item1"
+                (change)="onCombo1Chng()"
+              >
+                <option *ngFor="let item of items" [ngValue]="item">
+                  {{ item.itemName }}
+                </option>
+              </select>
+              <ng-container *ngIf="item1?.discountPrice; else itemPrice">
+                of $ {{ item1?.discountPrice }}
+              </ng-container>
+              <ng-template #itemPrice>
+                of $ {{ item1?.itemPrice }} at discount price
+              </ng-template>
+            </p>
+          </ng-container>
+        </div>
+        <div class="col-5 discount-price">
+          <span> =</span>
+          $
+          <input
+            type="number"
+            name="oneplusoneAmount"
+            class="inputStyle"
+            [(ngModel)]="amount"
+            placeholder="Enter amount.."
+            [disabled]="!item1?.itemPrice"
+          />
+        </div>
+      </div>
+      <div class="row">
+        <div class="col-12">
+          <button
+            (click)="addOffer('discounts')"
+            class="primary"
+            x
+            [disabled]="!(item1?.itemPrice && amount)"
+          >
+            Add Discount Price
+          </button>
+        </div>
+      </div>
+    </ng-template>
+  </form>
+</div>

@@ -1,0 +1,23 @@
+table {
+  /* border-collapse: collapse; */
+  border-spacing: 0;
+  width: 100%;
+  border-bottom: 1px solid #ddd;
+  padding-bottom: 30px;
+}
+
+th,
+td {
+  text-align: left;
+  padding: 8px;
+}
+p {
+  margin: 0;
+}
+.sub-text {
+  font-size: 13px;
+}
+.total-bill {
+  font-size: 16px;
+  margin-top: 20px;
+}

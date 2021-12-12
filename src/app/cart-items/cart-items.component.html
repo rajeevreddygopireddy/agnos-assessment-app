@@ -1,0 +1,49 @@
+<div class="row">
+  <div class="col-12">
+    <ng-container *ngIf="(itemsInCart | keyvalue)?.length; else noData">
+      <table>
+        <tr>
+          <th>Item Name</th>
+          <th>Item Price</th>
+          <th>Item Quantity</th>
+          <th>Total Price of Each Item</th>
+        </tr>
+
+        <ng-container *ngFor="let property of itemsInCart | keyvalue">
+          <tr>
+            <td>
+              <p>{{ itemsInCart[property.key].item.itemName }}</p>
+              <span
+                class="sub-text"
+                *ngIf="itemsInCart[property.key].item.itemDescription"
+                >({{ itemsInCart[property.key].item.itemDescription }})</span
+              >
+            </td>
+            <td>
+              <ng-container
+                *ngIf="
+                  itemsInCart[property.key].item.discountPrice;
+                  else showPrice
+                "
+              >
+                {{ itemsInCart[property.key].item.discountPrice }}
+              </ng-container>
+              <ng-template #showPrice>
+                {{ itemsInCart[property.key].item.itemPrice }}
+              </ng-template>
+            </td>
+            <td>
+              {{ itemsInCart[property.key].quantity }}
+            </td>
+            <td>$ {{ itemsInCart[property.key].totalItemPrice }}</td>
+          </tr>
+          <!-- {{ itemsInCart1[property.key].item | json }} {{ property.value }} -->
+        </ng-container>
+      </table>
+      <p class="total-bill">
+        Total Bill Amount : $ <strong>{{ totalBill }}</strong>
+      </p>
+    </ng-container>
+    <ng-template #noData> No items added to cart. </ng-template>
+  </div>
+</div>

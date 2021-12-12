@@ -1,0 +1,5 @@
+.line-through {
+  text-decoration: line-through;
+  display: inline-block;
+  margin-right: 15px;
+}

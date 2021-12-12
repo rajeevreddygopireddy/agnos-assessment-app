@@ -1,0 +1,9 @@
+<div id="mySidenav" class="sidenav" [ngClass]="{ 'open-nav': isMenuOpened }">
+  <a href="javascript:void(0)" class="closebtn" (click)="toggleNav()"
+    >&times;</a
+  >
+  <a href="javascript:void(0)" (click)="goTo('items')">Available Items</a>
+  <a href="javascript:void(0)" (click)="goTo('offers')">Add Offers</a>
+  <a href="javascript:void(0)" (click)="goTo('cart')">Cart</a>
+</div>
+<span class="menu-icon" (click)="toggleNav()">&#9776;</span>
